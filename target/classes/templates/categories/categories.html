@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:replace="fragments:: page_head('Home Shopme - Control panel')"></head>
+
+<body>
+	<div class="container-fluid">
+
+		<div th:replace="navigation:: menu "></div>
+
+		<div>
+			<h2>Manage Categories</h2>
+			<a th:href="@{/categories/new}"
+				class="fas fa-solid fa-folder-plus fa-1x icon-dark"></a> | <a
+				th:href="@{/categories/export/csv}"
+				class="fas fa-light fa-file-csv fa-1x icon-dark"></a>
+		</div>
+		
+		<div th:if="${message !=null}" class="alert alert-success text-center">
+			[[${message}]]</div>
+		<div>
+		
+		<div>
+			<form th:action="@{/users/page/1}" class="form-inline m-3">
+				<input type="hidden" name="sortField" th:value="${sortField}" /> <input
+					type="hidden" name="sortDir" th:value="${sortDir}" /> Filter:
+				&nbsp; <input type="search" name="keyword" th:value="${keyword}"
+					required="required" class="form-control" /> &nbsp;&nbsp;
+				<button type="submit" value="Search" class="btn btn-primary">
+					<i class="fas fa-light fa-magnifying-glass"></i>
+				</button>
+				&nbsp;&nbsp;
+				<button type="button" value="Clear" class="btn btn-secondary"
+					onClick="clearFilter()">
+					<i class="fas fa-regular fa-eraser"></i>
+				</button>
+
+			</form>
+		</div>
+
+		<div class="full-details">
+			<table
+				class="table table-bordered table-striped table-hover table-responsive-xl">
+				<thead class="thead-dark text-center">
+					<tr>
+						<th>ID</th>
+						<th>Category Image</th>
+						<th>Category Name</th>
+						<th>Alias</th>
+						<th>Status</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="category :${listCategory}">
+						<td>[[${category.id}]]</td>
+						<td>
+							<img th:src="@{${category.imagePath}}" style="width:80px" class="img-fluid">
+						
+						
+						</td>
+						<td>[[${category.name}]]</td>
+						<td>[[${category.alias}]]</td>
+						<td
+							th:replace="fragments :: status(${category.enabled}, ${category.name}, '/categories/' + ${category.id})"></td>
+						<td><div
+								th:replace="fragments :: edit('category', '/categories/edit/' + ${category.id})" />
+							&nbsp;
+							<div th:replace="fragments :: delete('category', ${category.id}, '/categories/delete/' + ${category.id})" />	</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+
+		<div class="modal fade text-center" id="confirmModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+
+						<h4 class="modal-tittle" id="modalTittle">Delete COnfirmation</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<div class="modal-body">
+						<span id="confirmText"></span>
+					</div>
+					<div class="modal-footer">
+						<a class="btn btn-success" href="" id="yesButton">Yes</a>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:replace="fragments:: footer"></div>
+	</div>
+
+</body>
+</html>

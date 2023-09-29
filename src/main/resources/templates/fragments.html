@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEADER LINK -->
+<head th:fragment="page_head(title)">
+	<meta http-equiv="Content-Type" content="text/html charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	
+	<title>[[${title}]]</title>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+	<link rel="stylesheet" type="text/css"  th:href="@{/fontawesome/all.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+</head>
+<!-- HEADER LINK END-->
+<body>
+
+	<!-- COLUMN LINK -->
+	<th th:fragment = "column_link(fieldName,columnLabel,removeTag)" th:remove="${removeTag}">
+		<a 	class="text-white" 
+			th:href="@{'/users/page/'+${currentPage}+'?sortField='+${fieldName}+'&sortDir='+${sortField != fieldName ? sortDir : reverseSortOrder} + ${keyword != null ? '&keyword='+keyword:''}}">
+			[[${columnLabel}]]
+		</a>
+		<span th:if="${sortField == fieldName}" th:class="${sortDir=='asc' ? 'fas fa-sort-up': 'fas fa-sort-down'}"></span>
+	</th>
+	<!-- COLUMN LINK END -->
+	
+	<!-- ROW STATUS -->
+	<td th:fragment="status(enabled, entityName, entityURL)">
+		<a th:if="${enabled == true}" class="fa-regular fa-circle-check icon-green" th:href="@{${entityURL}+'/enabled/false'}" th:tittle="'Disable this '+${entityName} "></a> 
+		<a th:if="${enabled == false}" class="fa-regular fa-circle-check icon-silver" th:href="@{${entityURL}+'/enabled/true'}" th:tittle="'Enable this '+${entityName}"></a>
+	</td>
+	<!-- ROW ENABLED END-->
+	
+	<!-- BUTTON EDIT & DELETE -->
+	<td th:fragment="buttonAction(id)">
+		<a class="fa-solid fa-pen-to-square icon-green" th:href="@{'/users/edit/'+${user.id}}" tittle="Edit this User"></a>
+		&nbsp; 
+		<a class="fa-solid fa-trash icon-dark link-delete" th:href="@{'/users/delete/'+${user.id}}" th:userId="${user.id}" tittle="Delete this User"></a>
+	</td>
+	<!-- BUTTON EDIT & DELETE END -->
+	
+	
+	<!-- EDIT -->
+	
+	<div th:fragment="edit(entityName, editURL)" th:remove="tag">
+		<a style="text-decoration: none;" class="fa-solid fa-pen-to-square icon-green" th:href="@{${editURL}}" th:title="'Edit this ' + ${entityName}"></a>
+	</div>
+	
+	<!-- EDIT END -->
+	
+	<!-- DELETE -->
+	<div th:fragment="delete(entityName, entityId, deleteURL)" th:remove="tag">
+		<a class="fa-solid fa-trash icon-dark link-delete" th:href="@{${deleteURL}}" th:entityId="${entityId}" th:title="'Delete this ' + ${entityName}"></a>
+	</div>
+	<!-- DELETE END -->
+		
+	<!-- PAGE LINK -->
+	<a	th:fragment="page_link(pageNum, label)" 
+		class="page-link" th:href="@{'/users/page/'+${pageNum}+'?sortField='+${sortField}+'&sortDir='+${sortDir}+${keyword != null ? '&keyword='+keyword:''}}">[[${label}]]
+	</a>
+	<!-- PAGE LINK END-->
+	
+	<!-- FOOTER -->
+	<div th:fragment="footer" class="text-center">
+		<p>Serkom- Copyright &copy; Dany</p>
+	</div>
+	<!-- FOTTER END -->
+</body>
+</html>
